@@ -81,10 +81,10 @@ bool getFileModificationTime(const String& path, time_t& result)
 bool getFileCreationTime(const String& path, time_t& result)
 {
     QFileInfo info(path);
-    result = info.created().toTime_t();
+    result = info.birthTime().toTime_t();
     return info.exists();
 }
-
+/*
 bool getFileMetadata(const String& path, FileMetadata& result)
 {
     QFileInfo info(path);
@@ -95,6 +95,7 @@ bool getFileMetadata(const String& path, FileMetadata& result)
     result.type = info.isDir() ? FileMetadata::Type::Directory : FileMetadata::Type::File;
     return true;
 }
+*/
 
 bool makeAllDirectories(const String& path)
 {
@@ -129,10 +130,9 @@ Vector<String> listDirectory(const String& path, const String& filter)
     if (!filter.isEmpty())
         nameFilters.append(filter);
     QFileInfoList fileInfoList = QDir(path).entryInfoList(nameFilters, QDir::AllEntries | QDir::NoDotAndDotDot);
-    foreach (const QFileInfo fileInfo, fileInfoList) {
-        String entry = String(fileInfo.canonicalFilePath());
-        entries.append(entry);
-    }
+
+    for (const auto& fileInfo : fileInfoList)
+        entries.constructAndAppend(fileInfo.canonicalFilePath());
 
     return entries;
 }
