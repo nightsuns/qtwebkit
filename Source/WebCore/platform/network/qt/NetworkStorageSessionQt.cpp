@@ -85,7 +85,7 @@ void NetworkStorageSession::setCookiesFromDOM(const URL& firstParty, const SameS
 
 bool NetworkStorageSession::cookiesEnabled() const
 {
-    return true;
+    return context() ? context()->networkAccessManager()->cookieJar() : SharedCookieJarQt::shared();
 }
 
 std::pair<String, bool> NetworkStorageSession::cookiesForDOM(const URL& firstParty, const SameSiteInfo& sameSiteInfo, const URL& url, Optional<uint64_t> frameID, Optional<PageIdentifier> pageID, IncludeSecureCookies includeSecureCookies) const
