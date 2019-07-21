@@ -324,20 +324,21 @@ void RenderLayerBacking::clearBackingSharingLayers()
     m_backingSharingLayers.clear();
 }
 
-Ref<GraphicsLayer> RenderLayerBacking::createGraphicsLayer(const String& name, GraphicsLayer::Type layerType)
+RefPtr<GraphicsLayer> RenderLayerBacking::createGraphicsLayer(const String& name, GraphicsLayer::Type layerType)
 {
-    auto* graphicsLayerFactory = renderer().page().chrome().client().graphicsLayerFactory();
+//    auto* graphicsLayerFactory = renderer().page().chrome().client().graphicsLayerFactory();
 
-    auto graphicsLayer = GraphicsLayer::create(graphicsLayerFactory, *this, layerType);
+//    auto graphicsLayer = GraphicsLayer::create(graphicsLayerFactory, *this, layerType);
 
-    graphicsLayer->setName(name);
+//    graphicsLayer->setName(name);
 
-#if PLATFORM(COCOA) && USE(CA)
-    graphicsLayer->setAcceleratesDrawing(compositor().acceleratedDrawingEnabled());
-    graphicsLayer->setUsesDisplayListDrawing(compositor().displayListDrawingEnabled());
-#endif
+//#if PLATFORM(COCOA) && USE(CA)
+//    graphicsLayer->setAcceleratesDrawing(compositor().acceleratedDrawingEnabled());
+//    graphicsLayer->setUsesDisplayListDrawing(compositor().displayListDrawingEnabled());
+//#endif
     
-    return graphicsLayer;
+//    return graphicsLayer;
+    return nullptr;
 }
 
 void RenderLayerBacking::setUsesDisplayListDrawing(bool usesDisplayListDrawing)
