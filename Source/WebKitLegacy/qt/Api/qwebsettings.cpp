@@ -873,7 +873,7 @@ static const char* resourceNameForWebGraphic(QWebSettings::WebGraphic type)
 void QWebSettings::setWebGraphic(WebGraphic type, const QPixmap& graphic)
 {
     WebCore::initializeWebCoreQt();
-    WebCore::Image::setPlatformResource(resourceNameForWebGraphic(type), graphic);
+    WebCore::Image::setPlatformResource(resourceNameForWebGraphic(type), graphic.toImage());
 }
 
 /*!
@@ -888,10 +888,10 @@ QPixmap QWebSettings::webGraphic(WebGraphic type)
     RefPtr<WebCore::Image> img = WebCore::Image::loadPlatformResource(resourceNameForWebGraphic(type));
     if (!img)
         return QPixmap();
-    QPixmap* pixmap = img->nativeImageForCurrentFrame();
-    if (!pixmap)
+    QImage* image = img->nativeImageForCurrentFrame();
+    if (!image)
         return QPixmap();
-    return *pixmap;
+    return QPixmap::fromImage(*image);
 }
 
 /*!
