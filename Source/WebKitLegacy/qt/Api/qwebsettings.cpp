@@ -1164,8 +1164,10 @@ qint64 QWebSettings::offlineStorageDefaultQuota()
 */
 void QWebSettings::setOfflineWebApplicationCachePath(const QString& path)
 {
+#ifndef APPLICATION_CACHE_STORAGE_BROKEN
     WebCore::initializeWebCoreQt();
     WebCore::ApplicationCacheStorage::singleton().setCacheDirectory(path);
+#endif
 }
 
 /*!
@@ -1178,8 +1180,10 @@ void QWebSettings::setOfflineWebApplicationCachePath(const QString& path)
 */
 QString QWebSettings::offlineWebApplicationCachePath()
 {
+#ifndef APPLICATION_CACHE_STORAGE_BROKEN
     WebCore::initializeWebCoreQt();
     return WebCore::ApplicationCacheStorage::singleton().cacheDirectory();
+#endif
 }
 
 /*!
@@ -1190,11 +1194,13 @@ QString QWebSettings::offlineWebApplicationCachePath()
 */
 void QWebSettings::setOfflineWebApplicationCacheQuota(qint64 maximumSize)
 {
+#ifndef APPLICATION_CACHE_STORAGE_BROKEN
     WebCore::initializeWebCoreQt();
     auto& applicationCacheStorage = WebCore::ApplicationCacheStorage::singleton();
     applicationCacheStorage.empty();
     applicationCacheStorage.vacuumDatabaseFile();
     applicationCacheStorage.setMaximumSize(maximumSize);
+#endif
 }
 
 /*!
@@ -1204,8 +1210,10 @@ void QWebSettings::setOfflineWebApplicationCacheQuota(qint64 maximumSize)
 */
 qint64 QWebSettings::offlineWebApplicationCacheQuota()
 {
+#ifndef APPLICATION_CACHE_STORAGE_BROKEN
     WebCore::initializeWebCoreQt();
     return WebCore::ApplicationCacheStorage::singleton().maximumSize();
+#endif
 }
 
 /*!
