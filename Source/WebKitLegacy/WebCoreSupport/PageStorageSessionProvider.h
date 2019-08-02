@@ -37,8 +37,8 @@ public:
 
     WebCore::NetworkStorageSession* storageSession() const
     {
-        if (m_page)
-            return NetworkStorageSessionMap::storageSession(m_page->sessionID());
+//        if (m_page)
+//            return NetworkStorageSessionMap::storageSession(m_page->sessionID());
         return nullptr;
     }
 
