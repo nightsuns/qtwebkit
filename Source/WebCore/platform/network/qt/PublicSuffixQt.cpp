@@ -28,7 +28,9 @@
 
 #if ENABLE(PUBLIC_SUFFIX_LIST)
 
+#include <QVector>
 #include <private/qtldurl_p.h>
+#include <wtf/URL.h>
 
 namespace WebCore {
 
@@ -44,7 +46,7 @@ String topPrivatelyControlledDomain(const String& domain)
 {
     if (domain.isEmpty())
         return String();
-    if (!domain.isAllASCII())
+    if (URL::hostIsIPAddress(domain) || !domain.isAllASCII())
         return domain;
 
     String lowercaseDomain = domain.convertToASCIILowercase();
@@ -55,7 +57,10 @@ String topPrivatelyControlledDomain(const String& domain)
     if (qIsEffectiveTLD(qLowercaseDomain))
         return String();
 
-    return qTopLevelDomain(qLowercaseDomain);
+    QString tld = qTopLevelDomain(qLowercaseDomain);
+    auto privateLabels = qLowercaseDomain.leftRef(qLowercaseDomain.length() - tld.length());
+    auto topPrivateLabel = privateLabels.split(QLatin1Char('.'), QString::SkipEmptyParts).last();
+    return QString(topPrivateLabel + tld);
 }
 
 } // namespace WebCore
