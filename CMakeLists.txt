@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(WebKit)
 
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif(CCACHE_FOUND)
+
 # This should be removed once we require CMake 3.3.
 if (POLICY CMP0058)
     cmake_policy(SET CMP0058 NEW)

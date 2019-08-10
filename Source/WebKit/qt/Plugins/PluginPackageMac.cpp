@@ -108,7 +108,7 @@ static Vector<String> stringListFromResourceId(SInt16 id)
     if (!handle)
         return list;
 
-    CFStringEncoding encoding = stringEncodingForResource(handle);
+    CFStringEncoding encoding = CFStringGetSystemEncoding();
 
     unsigned char* p = (unsigned char*)*handle;
     if (!p)

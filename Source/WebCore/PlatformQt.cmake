@@ -48,6 +48,7 @@ list(APPEND WebCore_INCLUDE_DIRECTORIES
     "${WEBCORE_DIR}/platform/text/qt"
     "${WEBCORE_DIR}/platform/win"
     "${WEBCORE_DIR}/platform/graphics/x11"
+    "${WEBCORE_DIR}/platform/spi/cf"
     "${WTF_DIR}"
 )
 

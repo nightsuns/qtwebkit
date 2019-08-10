@@ -90,8 +90,8 @@ EXTERN_C const struct _xpc_type_s _xpc_type_string;
 
 EXTERN_C xpc_object_t xpc_array_create(const xpc_object_t*, size_t count);
 #if COMPILER_SUPPORTS(BLOCKS)
-EXTERN_C bool xpc_array_apply(xpc_object_t, xpc_array_applier_t);
-EXTERN_C bool xpc_dictionary_apply(xpc_object_t xdict, xpc_dictionary_applier_t applier);
+// EXTERN_C bool xpc_array_apply(xpc_object_t, XPC_NOESCAPE xpc_array_applier_t);
+// EXTERN_C bool xpc_dictionary_apply(xpc_object_t xdict, XPC_NOESCAPE xpc_dictionary_applier_t applier);
 #endif
 EXTERN_C size_t xpc_array_get_count(xpc_object_t);
 EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);

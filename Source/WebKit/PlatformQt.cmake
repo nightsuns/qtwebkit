@@ -170,6 +170,8 @@ list(APPEND WebKit_INCLUDE_DIRECTORIES
     "${WEBCORE_DIR}/plugins/qt"
     "${WEBCORE_DIR}/rendering"
     "${WEBCORE_DIR}/rendering/style"
+    
+    "${WEBCORE_DIR}/platform/mac"
 
     "${WEBKIT_DIR}/.."
     "${WEBKIT_DIR}/Storage"
@@ -250,7 +252,7 @@ list(REMOVE_DUPLICATES WebKit_SYSTEM_INCLUDE_DIRECTORIES)
 
 if (ENABLE_WEBKIT2)
     if (APPLE)
-        set(WEBKIT2_LIBRARY -Wl,-force_load WebKit2)
+        set(WEBKIT2_LIBRARY -Wl,-force_load WebKit2 "-framework CoreGraphics -framework Cocoa")
     elseif (MSVC)
         set(WEBKIT2_LIBRARY "-WHOLEARCHIVE:WebKit2${CMAKE_DEBUG_POSTFIX}")
     elseif (UNIX OR MINGW)
@@ -327,6 +329,7 @@ if (ENABLE_NETSCAPE_PLUGIN_API)
             qt/Plugins/PluginPackageMac.cpp
             qt/Plugins/PluginViewMac.mm
         )
+        set_source_files_properties(qt/Plugins/PluginPackageMac.cpp PROPERTIES COMPILE_FLAGS "-ObjC++ -std=c++11")
     endif ()
 
     if (WIN32)

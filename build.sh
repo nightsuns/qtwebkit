@@ -1,0 +1,2 @@
+cmake .. -DPORT=Qt -DENABLE_NETSCAPE_PLUGIN_API=ON -G Ninja
+
