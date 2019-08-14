@@ -107,6 +107,13 @@ LauncherWindow::LauncherWindow(WindowOptions* data, QGraphicsScene* sharedScene)
 #if !defined(QT_NO_FILEDIALOG) && !defined(QT_NO_MESSAGEBOX)
     connect(page(), SIGNAL(downloadRequested(const QNetworkRequest&)), this, SLOT(downloadRequest(const QNetworkRequest&)));
 #endif
+
+
+    printf("startTimer\n");
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
+    timer->start(1000);
 }
 
 LauncherWindow::~LauncherWindow()
@@ -1320,3 +1327,19 @@ void LauncherWindow::find(int mode = s_findNormalFlag)
         page()->findText(m_lineEdit->text(), QFlag(m_findFlag));
 }
 #endif
+
+void LauncherWindow::onTimer() {
+    static int tick = 0;
+
+    tick ++;
+
+    QPoint pos(300,95);
+
+    if(this->m_view != nullptr) {
+        printf("onTimer\n");
+        QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+        QApplication::sendEvent(this->m_view, &event0);
+        QMouseEvent event1(QEvent::MouseButtonRelease, pos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+        QApplication::sendEvent(this->m_view, &event1);
+    }
+}

@@ -44,6 +44,7 @@
 #endif
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QMouseEvent>
 
 MainWindow::MainWindow()
     : m_page(new WebPage(this))

@@ -67,7 +67,7 @@ struct HighlightedElement;
 
 class WindowOptions {
 public:
-    bool useGraphicsView { false };
+    bool useGraphicsView {false };
     bool useDiskCache { false };
     bool useCompositing { false };
     bool useTiledBackingStore { false };
@@ -76,7 +76,7 @@ public:
     bool useMediaSource { false };
     bool useFrameFlattening { false };
     bool cacheWebView { false };
-    bool showFrameRate { false };
+    bool showFrameRate { true };
     bool resizesToContents { false };
     QGraphicsView::ViewportUpdateMode viewportUpdateMode { QGraphicsView::MinimalViewportUpdate };
     bool useLocalStorage { false };
@@ -186,6 +186,7 @@ public Q_SLOTS:
     LauncherWindow* newWindow();
     LauncherWindow* cloneWindow();
     void updateFPS(int fps);
+    void onTimer();
 
 Q_SIGNALS:
     void enteredFullScreenMode(bool on);
