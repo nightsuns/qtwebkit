@@ -463,46 +463,72 @@ void PluginView::handleMouseEvent(MouseEvent* event)
 
     NSEventType type = [currentEvent type];
 
-    switch (type) {
-        case NSLeftMouseDown:
-        case NSRightMouseDown:
-        case NSOtherMouseDown:
-            buttonNumber = [currentEvent buttonNumber];
-            clickCount = [currentEvent clickCount];
-            eventType = NPCocoaEventMouseDown;
-            // The plugin needs focus to receive keyboard events
-            if (Page* page = m_parentFrame->page())
-                page->focusController().setFocusedFrame(m_parentFrame);
-            m_parentFrame->document()->setFocusedElement(m_element);
-            break;
+    printf("NSEventType.type=%d\n", type);
 
-        case NSLeftMouseUp:
-        case NSRightMouseUp:
-        case NSOtherMouseUp:
-            buttonNumber = [currentEvent buttonNumber];
-            clickCount = [currentEvent clickCount];
-            eventType = NPCocoaEventMouseUp;
-            break;
+    bool eventProcessed = false;
 
-        case NSMouseMoved:
-            eventType = NPCocoaEventMouseMoved;
-            break;
+    // 优先处理鼠标事件
+    if(event->type() == eventNames().mouseupEvent) {
+        buttonNumber = 0;
+        clickCount = 1;
+        eventType = NPCocoaEventMouseUp;
 
-        case NSLeftMouseDragged:
-        case NSRightMouseDragged:
-        case NSOtherMouseDragged:
-            buttonNumber = [currentEvent buttonNumber];
-            eventType = NPCocoaEventMouseDragged;
-            break;
+        eventProcessed = true;
+    } else if(event->type() == eventNames().mousedownEvent) {
+        buttonNumber = 0;
+        clickCount = 1;
+        eventType = NPCocoaEventMouseDown;
+        // The plugin needs focus to receive keyboard events
+        if (Page* page = m_parentFrame->page())
+            page->focusController().setFocusedFrame(m_parentFrame);
+        m_parentFrame->document()->setFocusedElement(m_element);
 
-        case NSMouseEntered:
-            eventType = NPCocoaEventMouseEntered;
-            break;
+        eventProcessed = true;
+    }
 
-        case NSMouseExited:
-            eventType = NPCocoaEventMouseExited;
-        default:
-            return;
+    if(!eventProcessed) {
+        switch (type) {
+            case NSLeftMouseDown:
+            case NSRightMouseDown:
+            case NSOtherMouseDown:
+                buttonNumber = [currentEvent buttonNumber];
+                clickCount = [currentEvent clickCount];
+                eventType = NPCocoaEventMouseDown;
+                // The plugin needs focus to receive keyboard events
+                if (Page* page = m_parentFrame->page())
+                    page->focusController().setFocusedFrame(m_parentFrame);
+                m_parentFrame->document()->setFocusedElement(m_element);
+                break;
+
+            case NSLeftMouseUp:
+            case NSRightMouseUp:
+            case NSOtherMouseUp:
+                buttonNumber = [currentEvent buttonNumber];
+                clickCount = [currentEvent clickCount];
+                eventType = NPCocoaEventMouseUp;
+                break;
+
+            case NSMouseMoved:
+                eventType = NPCocoaEventMouseMoved;
+                break;
+
+            case NSLeftMouseDragged:
+            case NSRightMouseDragged:
+            case NSOtherMouseDragged:
+                buttonNumber = [currentEvent buttonNumber];
+                eventType = NPCocoaEventMouseDragged;
+                break;
+
+            case NSMouseEntered:
+                eventType = NPCocoaEventMouseEntered;
+                break;
+
+            case NSMouseExited:
+                eventType = NPCocoaEventMouseExited;
+                break;
+            default:
+                return;
+        }
     }
 
     NPCocoaEvent cocoaEvent;
@@ -516,9 +542,16 @@ void PluginView::handleMouseEvent(MouseEvent* event)
 
     cocoaEvent.data.mouse.pluginX = event->layerX() - m_npWindow.x + m_windowRect.x() - m_element->offsetLeft();
     cocoaEvent.data.mouse.pluginY = event->layerY() - m_npWindow.y + m_windowRect.y() - m_element->offsetTop();
-    cocoaEvent.data.mouse.deltaX = [currentEvent deltaX];
-    cocoaEvent.data.mouse.deltaY = [currentEvent deltaY];
-    cocoaEvent.data.mouse.deltaZ = [currentEvent deltaZ];
+    if(!eventProcessed) {
+        cocoaEvent.data.mouse.deltaX = [currentEvent deltaX];
+        cocoaEvent.data.mouse.deltaY = [currentEvent deltaY];
+        cocoaEvent.data.mouse.deltaZ = [currentEvent deltaZ];
+    } else {
+        cocoaEvent.data.mouse.deltaX = 0;
+        cocoaEvent.data.mouse.deltaY = 0;
+        cocoaEvent.data.mouse.deltaZ = 0;
+    }
+
     cocoaEvent.data.mouse.modifierFlags = getModifiers(event);
 
     int16_t response = dispatchNPCocoaEvent(cocoaEvent);
